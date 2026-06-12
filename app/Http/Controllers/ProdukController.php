@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ProdukController extends Controller
+{
+    public function import(Request $request)
+    {
+        return back()->with(
+            'success',
+            'File berhasil diupload'
+        );
+    }
+}
