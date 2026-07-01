@@ -79,12 +79,12 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8">
         @if (session('success'))
-            <div class="mb-6 p-4 bg-emerald-100 border-4 border-emerald-600 text-emerald-900 rounded-lg neobrutal-shadow">
+            <div class="alert-notification mb-6 p-4 bg-emerald-100 border-4 border-emerald-600 text-emerald-900 rounded-lg neobrutal-shadow">
                 {{ session('success') }}
             </div>
         @endif
         @if (session('error'))
-            <div class="mb-6 p-4 bg-red-100 border-4 border-red-600 text-red-900 rounded-lg neobrutal-shadow">
+            <div class="alert-notification mb-6 p-4 bg-red-100 border-4 border-red-600 text-red-900 rounded-lg neobrutal-shadow">
                 {{ session('error') }}
             </div>
         @endif
@@ -102,6 +102,54 @@
             <div class="bg-white border-4 border-on-surface p-6 neobrutal-shadow">
                 <p class="font-label-bold text-label-bold uppercase text-on-surface-variant mb-2">Total Transaksi</p>
                 <p class="text-headline-lg font-bold text-on-surface">{{ $stats['total_transactions'] }}</p>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <!-- Top 5 Produk Terlaris -->
+            <div class="bg-white border-4 border-on-surface p-6 neobrutal-shadow-large flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-cyan-400 border-4 border-black flex items-center justify-center">
+                            <span class="material-symbols-outlined text-xl font-bold">trending_up</span>
+                        </div>
+                        <h3 class="font-bold text-lg uppercase">Top 5 Terlaris</h3>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartTopProducts"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stok Barang -->
+            <div class="bg-white border-4 border-on-surface p-6 neobrutal-shadow-large flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-emerald-400 border-4 border-black flex items-center justify-center">
+                            <span class="material-symbols-outlined text-xl font-bold">inventory_2</span>
+                        </div>
+                        <h3 class="font-bold text-lg uppercase">Stok Barang (Top 5)</h3>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartStock"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jumlah Transaksi per Status -->
+            <div class="bg-white border-4 border-on-surface p-6 neobrutal-shadow-large flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-yellow-400 border-4 border-black flex items-center justify-center">
+                            <span class="material-symbols-outlined text-xl font-bold">payments</span>
+                        </div>
+                        <h3 class="font-bold text-lg uppercase">Transaksi per Status</h3>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartStatus"></canvas>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -162,5 +210,120 @@
             </div>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: '#1b1b1b',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    titleFont: { family: 'Lexend', weight: 'bold' },
+                    bodyFont: { family: 'Lexend' },
+                    borderWidth: 2,
+                    borderColor: '#000000',
+                    cornerRadius: 4
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Lexend',
+                            weight: 'bold',
+                            size: 11
+                        },
+                        color: '#1b1b1b'
+                    },
+                    border: {
+                        color: '#000000',
+                        width: 3
+                    }
+                },
+                y: {
+                    grid: {
+                        color: '#e2e2e2',
+                        lineWidth: 1
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Lexend',
+                            weight: 'bold',
+                            size: 11
+                        },
+                        color: '#1b1b1b',
+                        stepSize: 1
+                    },
+                    border: {
+                        color: '#000000',
+                        width: 3
+                    }
+                }
+            }
+        };
+
+        // 1. Top 5 Produk Terlaris Chart
+        const ctxTop = document.getElementById('chartTopProducts').getContext('2d');
+        new Chart(ctxTop, {
+            type: 'bar',
+            data: {
+                labels: @json($topProducts->pluck('barang_name')),
+                datasets: [{
+                    label: 'Terjual',
+                    data: @json($topProducts->pluck('total_qty')),
+                    backgroundColor: '#22d3ee', // Cyan 400
+                    borderColor: '#000000',
+                    borderWidth: 3,
+                    borderRadius: 4,
+                }]
+            },
+            options: chartOptions
+        });
+
+        // 2. Stok Barang Chart
+        const ctxStock = document.getElementById('chartStock').getContext('2d');
+        new Chart(ctxStock, {
+            type: 'bar',
+            data: {
+                labels: @json($barangStock->pluck('nama')),
+                datasets: [{
+                    label: 'Stok',
+                    data: @json($barangStock->pluck('stok')),
+                    backgroundColor: '#34d399', // Emerald 400
+                    borderColor: '#000000',
+                    borderWidth: 3,
+                    borderRadius: 4,
+                }]
+            },
+            options: chartOptions
+        });
+
+        // 3. Transaksi per Status Chart
+        const ctxStatus = document.getElementById('chartStatus').getContext('2d');
+        new Chart(ctxStatus, {
+            type: 'bar',
+            data: {
+                labels: @json($transactionsByStatus->pluck('status')),
+                datasets: [{
+                    label: 'Transaksi',
+                    data: @json($transactionsByStatus->pluck('count')),
+                    backgroundColor: '#fbbf24', // Amber/Yellow 400
+                    borderColor: '#000000',
+                    borderWidth: 3,
+                    borderRadius: 4,
+                }]
+            },
+            options: chartOptions
+        });
+    </script>
 </body>
 </html>

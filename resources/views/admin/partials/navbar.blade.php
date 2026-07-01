@@ -43,3 +43,5 @@
         </nav>
     </div>
 </div>
+
+<script src="{{ asset('js/neobrutal-helpers.js') }}"></script>

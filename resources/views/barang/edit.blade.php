@@ -232,5 +232,6 @@
         }
     });
 </script>
+<script src="{{ asset('js/neobrutal-helpers.js') }}"></script>
 </body>
 </html>

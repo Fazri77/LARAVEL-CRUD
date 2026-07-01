@@ -204,5 +204,6 @@
             @endif
         </div>
     </main>
+    <script src="{{ asset('js/neobrutal-helpers.js') }}"></script>
 </body>
 </html>

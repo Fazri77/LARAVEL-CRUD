@@ -22,9 +22,30 @@ class AdminController extends Controller
         
         $recentBarang = Barang::latest()->take(5)->get();
         
+        // 1. Top 5 produk terlaris
+        $topProducts = Transaction::selectRaw('barang_name, sum(qty) as total_qty')
+            ->groupBy('barang_name')
+            ->orderByDesc('total_qty')
+            ->take(5)
+            ->get();
+            
+        // 2. Stok barang (Top 5 terbanyak)
+        $barangStock = Barang::select('nama', 'stok')
+            ->orderByDesc('stok')
+            ->take(5)
+            ->get();
+            
+        // 3. Jumlah transaksi per status
+        $transactionsByStatus = Transaction::selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->get();
+        
         return view('admin.dashboard', [
             'stats' => $stats,
             'recentBarang' => $recentBarang,
+            'topProducts' => $topProducts,
+            'barangStock' => $barangStock,
+            'transactionsByStatus' => $transactionsByStatus,
         ]);
     }
 
@@ -56,5 +77,17 @@ class AdminController extends Controller
             'transactions' => $transactions,
             'statusBreakdown' => $statusBreakdown,
         ]);
+    }
+
+    /**
+     * Confirm transaction status to Selesai
+     */
+    public function confirmTransaction(int $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->status = 'Selesai';
+        $transaction->save();
+
+        return back()->with('success', 'Transaksi ' . $transaction->invoice . ' berhasil dikonfirmasi menjadi Selesai.');
     }
 }

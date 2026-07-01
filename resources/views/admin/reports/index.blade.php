@@ -106,6 +106,17 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8">
+        @if (session('success'))
+            <div class="alert-notification mb-6 p-4 bg-emerald-100 border-4 border-emerald-600 text-emerald-900 rounded-lg neobrutal-shadow">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert-notification mb-6 p-4 bg-red-100 border-4 border-red-600 text-red-900 rounded-lg neobrutal-shadow">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Section Header -->
         <div class="mb-8">
             <h1 class="text-headline-lg font-bold text-on-surface uppercase">Laporan Sistem</h1>
@@ -143,6 +154,7 @@
                                 <th class="text-left py-2 px-3 font-bold">Item</th>
                                 <th class="text-left py-2 px-3 font-bold">Total</th>
                                 <th class="text-left py-2 px-3 font-bold">Status</th>
+                                <th class="text-left py-2 px-3 font-bold">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,10 +167,22 @@
                                     <td class="py-2 px-3"><span
                                             class="px-2 py-1 border-2 border-black text-xs font-bold {{ $transaction->status === 'Pending' ? 'bg-yellow-200' : 'bg-emerald-200' }}">{{ $transaction->status }}</span>
                                     </td>
+                                    <td class="py-2 px-3">
+                                        @if ($transaction->status === 'Pending')
+                                            <form action="{{ route('admin.transactions.confirm', $transaction->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="px-3 py-1 bg-emerald-400 text-on-surface border-2 border-black font-bold text-xs uppercase neobrutal-shadow hover:bg-emerald-500 transition-colors">
+                                                    Konfirmasi
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="text-slate-400 text-xs font-bold uppercase">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-4 px-3 text-center text-slate-500">Belum ada transaksi.
+                                    <td colspan="6" class="py-4 px-3 text-center text-slate-500">Belum ada transaksi.
                                     </td>
                                 </tr>
                             @endforelse

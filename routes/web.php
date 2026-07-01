@@ -32,6 +32,9 @@ Route::get('/admin/reports/export', [LaporanController::class, 'export'])
 Route::post('/admin/import/barang', [ImportController::class, 'barang'])
     ->name('admin.import.barang');
 
+Route::get('/admin/import/template', [ImportController::class, 'template'])
+    ->name('admin.import.template');
+
 Route::get('/admin/reports/import', function () {
     return view('admin.reports.import');
 })->name('admin.reports.import');
@@ -56,6 +59,7 @@ Route::middleware(['admin'])->group(function () {
     })->name('admin.tools');
     
     Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports');
+    Route::post('/admin/transactions/{id}/confirm', [AdminController::class, 'confirmTransaction'])->name('admin.transactions.confirm');
     
     Route::get('/admin/profile', function () {
         return view('admin.profile.index');

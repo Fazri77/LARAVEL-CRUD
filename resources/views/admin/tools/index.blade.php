@@ -106,10 +106,30 @@
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 py-8">
-       <div id="export-notif"
-     class="hidden mb-6 p-5 bg-emerald-100 border-4 border-emerald-700 text-emerald-900 rounded-lg neobrutal-shadow">
-    Export berhasil di unduh! Periksa folder download Anda.
-</div>
+        @if (session('success'))
+            <div class="alert-notification mb-6 p-5 bg-emerald-100 border-4 border-emerald-700 text-emerald-900 rounded-lg neobrutal-shadow">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert-notification mb-6 p-5 bg-red-100 border-4 border-red-700 text-red-900 rounded-lg neobrutal-shadow">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="mb-6 p-5 bg-red-100 border-4 border-red-700 text-red-900 rounded-lg neobrutal-shadow">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div id="export-notif"
+            class="hidden mb-6 p-5 bg-emerald-100 border-4 border-emerald-700 text-emerald-900 rounded-lg neobrutal-shadow">
+            Export berhasil di unduh! Periksa folder download Anda.
+        </div>
 
         <!-- Section Header -->
         <div class="mb-6">
@@ -221,21 +241,22 @@
                             <p class="font-bold text-lg">Drag & Drop Excel</p>
                             <p class="text-sm text-slate-600">atau klik untuk browse file Anda</p>
                         </div>
-                        <input type="file" name="file" accept=".xlsx" id="file-upload" class="hidden" required />
+                        <input type="file" name="file" accept=".xlsx,.xls" id="file-upload" class="hidden" required />
+                        <div id="file-name" class="text-sm font-bold text-slate-700">Belum ada file terpilih</div>
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-400 border-4 border-black py-4 font-bold uppercase neobrutal-shadow">
                         Upload & Import
                     </button>
 
-                    <div
+                    <a href="{{ route('admin.import.template') }}"
                         class="bg-slate-100 border-4 border-black p-4 flex justify-between items-center hover:bg-black hover:text-white transition cursor-pointer">
                         <div>
                             <h3 class="font-bold uppercase text-sm">Butuh Template?</h3>
                             <p class="text-sm text-slate-600">Download template bulk import</p>
                         </div>
                         <span class="material-symbols-outlined">file_download</span>
-                    </div>
+                    </a>
                 </section>
             </form>
             <iframe name="downloadFrame" class="hidden"></iframe>
@@ -244,8 +265,18 @@
     <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-upload');
+        const fileName = document.getElementById('file-name');
 
         dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files && fileInput.files.length > 0) {
+                fileName.textContent = 'File dipilih: ' + fileInput.files[0].name;
+                fileName.className = 'text-sm font-bold text-emerald-700';
+            } else {
+                fileName.textContent = 'Belum ada file terpilih';
+                fileName.className = 'text-sm font-bold text-slate-700';
+            }
+        });
 
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults);

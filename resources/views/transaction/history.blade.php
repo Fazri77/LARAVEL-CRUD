@@ -29,12 +29,12 @@
 </header>
 <main class="max-w-7xl mx-auto px-6 py-10 space-y-8">
     @if (session('success'))
-        <div class="bg-emerald-100 border-4 border-emerald-700 text-emerald-900 p-5 rounded-lg neobrutal-shadow">
+        <div class="alert-notification bg-emerald-100 border-4 border-emerald-700 text-emerald-900 p-5 rounded-lg neobrutal-shadow">
             {{ session('success') }}
         </div>
     @endif
     @if (session('error'))
-        <div class="bg-red-100 border-4 border-red-700 text-red-900 p-5 rounded-lg neobrutal-shadow">
+        <div class="alert-notification bg-red-100 border-4 border-red-700 text-red-900 p-5 rounded-lg neobrutal-shadow">
             {{ session('error') }}
         </div>
     @endif
@@ -105,5 +105,6 @@
         <div class="mt-6">{{ $transactions->links() }}</div>
     </section>
 </main>
+<script src="{{ asset('js/neobrutal-helpers.js') }}"></script>
 </body>
 </html>
