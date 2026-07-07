@@ -1,4 +1,4 @@
-<h1>Proyek Laravel FigureVault</h1>
+<h1>Proyekk Laravel FigureVault</h1>
 <p>Ini adalah proyek laravel FigureVault</p>
 
 
