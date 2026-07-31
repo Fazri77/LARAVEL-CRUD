@@ -1,8 +1,7 @@
 ## Proyekk Laravel FigureVault
 <p>Ini adalah proyek laravel FigureVault</p>
 
-## Fitur Utama (belum ada — penting banget ditambahin)
-<p></p>List semua fitur pakai bullet, termasuk yang belum disebut di proposal:</p>
+## Fitur Utama
 
 * Autentikasi Admin
 * Manajemen Produk (CRUD)
@@ -13,6 +12,16 @@
 - Market User (katalog produk)
 - Profil Pengguna
 - Riwayat Transaksi
+
+## Teknologi yang Digunakan
+
+•	Laravel 
+•	MySQL 
+•	HTML, CSS, dan JavaScript 
+•	Tailwind CSS 
+•	Maatwebsite Excel 
+•	DomPDF 
+
 
 ## Screenshot Login
 ![Login Page](public/img/Login.png)
