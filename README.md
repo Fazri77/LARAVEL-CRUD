@@ -3,8 +3,8 @@
 
 ## Fitur Utama
 
-* Autentikasi Admin
-* Manajemen Produk (CRUD)
+- Autentikasi Admin
+- Manajemen Produk (CRUD)
 - Manajemen Transaksi
 - Dashboard
 - Laporan Penjualan
@@ -15,12 +15,12 @@
 
 ## Teknologi yang Digunakan
 
-•	Laravel 
-•	MySQL 
-•	HTML, CSS, dan JavaScript 
-•	Tailwind CSS 
-•	Maatwebsite Excel 
-•	DomPDF 
+- Laravel 
+- MySQL 
+- HTML, CSS, dan JavaScript 
+- Tailwind CSS 
+- Maatwebsite Excel 
+- DomPDF 
 
 
 ## Screenshot Login
